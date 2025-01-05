@@ -43,7 +43,7 @@ const Page = () => {
     formData.append('quantity', quantity?.toString() || '100')
 
     try {
-      const res = await fetch(`${process.env.API}/analyze-image`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/analyze-image`, {
         method: 'POST',
         body: formData,
       })
