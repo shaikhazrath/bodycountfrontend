@@ -34,19 +34,21 @@ export default function NutritionTracker() {
         const user = (await supabase.auth.getUser()).data.user?.id
         if (!session || !user) {
             router.push('/auth')
-        }
-        const {data,error} = await supabase.from('users').select("*").eq("user",user)
-        if(data.length === 0){
-            router.push('/app/profile')
         }else{
-            const filteredData = {
-                Calories: data[0].Calories || 0,
-                Fats: data[0].Fats || 0,
-                Protein: data[0].Protein || 0,
-                Carbs: data[0].Carbs || 0,
-            };
-            setGoals(filteredData);
+            const {data,error} = await supabase.from('users').select("*").eq("user",user)
+            if(data && data.length === 0){
+                router.push('/app/profile')
+            }else{
+                const filteredData = {
+                    Calories: data[0].Calories || 0,
+                    Fats: data[0].Fats || 0,
+                    Protein: data[0].Protein || 0,
+                    Carbs: data[0].Carbs || 0,
+                };
+                setGoals(filteredData);
+            }
         }
+     
 
         console.log(user)
     }
@@ -213,7 +215,7 @@ export default function NutritionTracker() {
 
     <div className="space-y-6 mt-8">
         <h2 className="text-2xl font-semibold text-white">Today's Meals</h2>
-        {meals.map((meal, index) => (
+        {meals && meals.map((meal, index) => (
             <MealCard
                 key={index}
                 {...meal}
