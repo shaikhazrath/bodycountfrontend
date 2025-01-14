@@ -1,217 +1,196 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { Upload, Camera, Loader2, X } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import NutritionCard from '@/components/NutritionCard'
-import ProgressRing from '@/components/ProgressRing'
-
-const Page = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [quantity, setQuantity] = useState<number | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [nutritionData, setNutritionData] = useState<{
-    calories: number
-    carbs: number
-    protein: number
-    fats: number
-  } | null>(null)
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setSelectedFile(file)
-      const url = URL.createObjectURL(file)
-      setPreviewUrl(url)
-      setError(null)
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!selectedFile) {
-      setError('Please select a food image to analyze.')
-      return
-    }
-
-    setIsLoading(true)
-    const formData = new FormData()
-    formData.append('image', selectedFile)
-    formData.append('quantity', quantity?.toString() || '100')
-
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/analyze-image`, {
-        method: 'POST',
-        body: formData,
-      })
-      if (!res.ok) {
-        throw new Error('Error analyzing image')
-      }
-      let data = await res.json()
-      data = JSON.parse(data)
-      setNutritionData({
-        calories: parseFloat(data.Calories),
-        carbs: parseFloat(data.Carbs),
-        protein: parseFloat(data.Protein),
-        fats: parseFloat(data.Fats),
-      })
-      setError(null)
-    } catch (err) {
-      console.error(err)
-      setError('Failed to analyze image. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const clearImage = () => {
-    setSelectedFile(null)
-    setPreviewUrl(null)
-    setNutritionData(null)
-  }
-
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Camera, ChevronRight, Gauge, Leaf, Smartphone, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
+import Tracker from '@/components/Tracker'
+import { useRouter } from 'next/navigation';
+export default function Home() {
+  const router = useRouter()
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <h1 className="text-4xl font-bold mb-8 text-center">BodyCount Traker</h1>
-        <div className="bg-gray-900 rounded-2xl shadow-xl p-6 mb-8">
-          
-        {nutritionData && (
-          <div className="bg-gray-900 rounded-2xl shadow-xl p-6 animate-fade-in">
-            <h2 className="text-2xl font-semibold mb-6 text-white">
-              Nutrition Analysis
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-              {/* <div className="flex justify-center items-center">
-                <ProgressRing
-                  calories={nutritionData.calories}
-                  carbs={nutritionData.carbs}
-                  protein={nutritionData.protein}
-                  fats={nutritionData.fats}
-                />
-              </div> */}
-              <div className="grid grid-cols-2 gap-4">
-                <NutritionCard
-                  title="Calories"
-                  value={nutritionData.calories}
-                  unit="kcal"
-                  color="text-yellow-400"
-                />
-                <NutritionCard
-                  title="Carbs"
-                  value={nutritionData.carbs}
-                  unit="g"
-                  color="text-green-400"
-                />
-                <NutritionCard
-                  title="Protein"
-                  value={nutritionData.protein}
-                  unit="g"
-                  color="text-blue-400"
-                />
-                <NutritionCard
-                  title="Fats"
-                  value={nutritionData.fats}
-                  unit="g"
-                  color="text-red-400"
-                />
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex-1 space-y-6"
+            >
+              <h1 className="text-5xl font-bold leading-tight">
+                Instant Food Analysis
+                <span className="text-primary block">Powered by AI</span>
+              </h1>
+              <p className="text-xl text-muted-foreground">
+                Get detailed nutritional insights from any food photo in seconds. Calories, macros, and more with just a snap.
+              </p>
+              <div className="flex gap-4">
+                <Button size="lg" className="text-lg" onClick={()=>router.push('/app')} >
+                  Try Now Free
+                  <ChevronRight className="ml-2 h-5 w-5" />
+                </Button>
+                <Button size="lg" variant="outline" className="text-lg">
+                  Watch Demo
+                </Button>
               </div>
-            </div>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex-1"
+            >
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
+                  alt="Food Analysis Demo"
+                  className="rounded-lg shadow-2xl"
+                />
+                <div className="absolute -right-0.5 -bottom-4 bg-white p-6 rounded-lg shadow-lg">
+                  <div className="space-y-2">
+                    <div className="font-medium">Nutritional Analysis</div>
+                    <div className="text-sm text-muted-foreground">Calories: 320</div>
+                    <div className="text-sm text-muted-foreground">Protein: 12g</div>
+                    <div className="text-sm text-muted-foreground">Carbs: 42g</div>
+                    <div className="text-sm text-muted-foreground">Fat: 14g</div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
-        )}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="relative">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-                id="file-upload"
-              />
-              <label
-                htmlFor="file-upload"
-                className={cn(
-                  "flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-xl cursor-pointer",
-                  "transition-colors duration-200",
-                  "hover:border-blue-500 hover:bg-gray-800",
-                  previewUrl ? "border-blue-500" : "border-gray-600"
-                )}
-              >
-                {previewUrl ? (
-                  <div className="relative w-full h-full">
-                    <img
-                      src={previewUrl}
-                      alt="Preview"
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-lg opacity-0 hover:opacity-100 transition-opacity">
-                      <Camera className="w-8 h-8 text-white" />
-                    </div>
-                    <button
-                      type="button"
-                      onClick={clearImage}
-                      className="absolute top-2 right-2 bg-red-500 rounded-full p-1 hover:bg-red-600 transition-colors"
-                    >
-                      <X className="w-4 h-4 text-white" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-6">
-                    <Upload className="w-12 h-12 text-gray-400 mb-3" />
-                    <p className="text-sm text-gray-300">
-                      Click or drag a food image here
-                    </p>
-                  </div>
-                )}
-              </label>
-            </div>
-            <input
-              type="number"
-              value={quantity || ''}
-              onChange={(e) => setQuantity(parseInt(e.target.value))}
-              placeholder="Enter quantity in grams"
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400"
-            />
-              <button
-                type="submit"
-                disabled={isLoading || !selectedFile || !quantity}
-                className={cn(
-                  "w-full py-3 px-4 rounded-lg text-white font-medium",
-                  "transition-colors duration-200",
-                  "flex items-center justify-center space-x-2",
-                  isLoading || !selectedFile ||  !quantity
-                    ? "bg-gray-600 cursor-not-allowed"
-                    : "bg-blue-500 hover:bg-blue-600"
-                )}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Analyzing...</span>
-                  </>
-                ) : (
-                  <>
-                    <Camera className="w-5 h-5" />
-                    <span>Analyze Food</span>
-                  </>
-                )}
-              </button>
-          </form>
-
-          {error && (
-            <div className="mt-4 p-4 bg-red-900/30 border border-red-800 rounded-lg">
-              <p className="text-red-400 text-sm">{error}</p>
-            </div>
-          )}
         </div>
+      </section>
 
-      </div>
+      {/* Features Section */}
+      <section className="py-20 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Why Choose Our AI Food Analysis</h2>
+            <p className="text-muted-foreground">Advanced technology meets nutritional expertise</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <FeatureCard
+              icon={<Zap className="h-8 w-8" />}
+              title="Instant Analysis"
+              description="Get detailed nutritional information in under 2 seconds"
+            />
+            <FeatureCard
+              icon={<Gauge className="h-8 w-8" />}
+              title="90% Accuracy"
+              description="AI-powered recognition trained on millions of food images"
+            />
+            <FeatureCard
+              icon={<Leaf className="h-8 w-8" />}
+              title="Comprehensive Data"
+              description="Complete macro and micronutrient breakdown"
+            />
+          </div>
+        </div>
+      </section>
+      <Tracker/>
+
+      {/* How It Works */}
+      <section className="py-5 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-16">How It Works</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <StepCard
+              number="1"
+              icon={<Camera className="h-6 w-6" />}
+              title="Take a Photo"
+              description="Snap a picture of any food or meal"
+            />
+            <StepCard
+              number="2"
+              icon={<Zap className="h-6 w-6" />}
+              title="AI Analysis"
+              description="Our AI instantly processes the image"
+            />
+            <StepCard
+              number="3"
+              icon={<Smartphone className="h-6 w-6" />}
+              title="Get Results"
+              description="View detailed nutritional breakdown"
+            />
+          </div>
+        </div>
+      </section>
+      {/* Social Proof */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Trusted by Thousands</h2>
+            <p className="text-muted-foreground">Join our growing community of health-conscious users</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <TestimonialCard
+              quote="This app has completely changed how I track my nutrition. It's so fast and accurate!"
+              author="Sarah M."
+              role="Fitness Coach"
+            />
+            <TestimonialCard
+              quote="The detailed breakdown of nutrients helps me make better food choices every day."
+              author="James K."
+              role="Professional Athlete"
+            />
+            <TestimonialCard
+              quote="As a nutritionist, I recommend this app to all my clients. It's simply revolutionary."
+              author="Dr. Emily Chen"
+              role="Nutritionist"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-primary text-primary-foreground">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6">Start Your Health Journey Today</h2>
+          <p className="text-xl mb-8 opacity-90">Join thousands of users making better nutritional choices</p>
+          <Button size="lg" variant="secondary" className="text-lg">
+            Get Started Free
+            <ChevronRight className="ml-2 h-5 w-5" />
+          </Button>
+        </div>
+      </section>
     </div>
-  )
+  );
 }
 
-export default Page
+function FeatureCard({ icon, title, description }) {
+  return (
+    <Card className="p-6 hover:shadow-lg transition-shadow">
+      <div className="mb-4 text-primary">{icon}</div>
+      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+      <p className="text-muted-foreground">{description}</p>
+    </Card>
+  );
+}
 
+function StepCard({ number, icon, title, description }) {
+  return (
+    <Card className="p-6 relative">
+      <div className="absolute -top-4 -left-4 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold">
+        {number}
+      </div>
+      <div className="mb-4 text-primary">{icon}</div>
+      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+      <p className="text-muted-foreground">{description}</p>
+    </Card>
+  );
+}
+
+function TestimonialCard({ quote, author, role }) {
+  return (
+    <Card className="p-6">
+      <p className="mb-4 text-muted-foreground italic">&ldquo;{quote}&rdquo;</p>
+      <div>
+        <div className="font-semibold">{author}</div>
+        <div className="text-sm text-muted-foreground">{role}</div>
+      </div>
+    </Card>
+  );
+}
