@@ -32,6 +32,9 @@ export default function NutritionTracker() {
     const chechAuth = async () => {
         const session = await supabase.auth.getSession()
         const user = (await supabase.auth.getUser()).data.user?.id
+        if (!session || !user) {
+            router.push('/auth')
+        }
         const {data,error} = await supabase.from('users').select("*").eq("user",user)
         if(data.length === 0){
             router.push('/app/profile')
@@ -44,9 +47,7 @@ export default function NutritionTracker() {
             };
             setGoals(filteredData);
         }
-        if (!session || !user) {
-            router.push('/auth')
-        }
+
         console.log(user)
     }
 
