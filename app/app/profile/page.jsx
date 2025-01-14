@@ -162,12 +162,12 @@ const UserProfile = () => {
 
             <div className="w-full fixed bottom-0 bg-black/50 backdrop-blur-md p-4 flex justify-between">
               
-                {/* <Button
+                <Button
                     onClick={handleLogout}
                     className="w-full bg-red-600 hover:bg-red-700 text-white"
                 >
                     Logout
-                </Button> */}
+                </Button>
             </div>
         </div>
     );
