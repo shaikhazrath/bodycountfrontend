@@ -20,7 +20,7 @@ const AuthPage = () => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `/app`
+          redirectTo: `https://bodycountai.vercel.app/app`
         }
       })
 
