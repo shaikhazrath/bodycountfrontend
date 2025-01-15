@@ -14,32 +14,25 @@ const AuthPage = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      setIsLoading(true);
-      setError(null);
-  
+      setIsLoading(true)
+      setError(null)
+      
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: 'https://bodycountai.vercel.app/app', 
-        },
-      });
-  
-      if (error) throw error;
-  
-      const user = await supabase.auth.getSession();
-  
-      if (user?.data?.session) {
-        router.push('/app'); 
-      } else {
-        setError('Authentication failed');
-      }
-    } catch (err:any) {
-      setError(err.message || 'Failed to login with Google');
-      setIsLoading(false);
+          redirectTo: window.location.origin + '/app',
+        }
+      })
+
+      if (error) throw error
+      const user = await supabase.auth.getSession()
+console.log(user.data)
+      
+    } catch (err: any) {
+      setError(err.message || 'Failed to login with Google')
+      setIsLoading(false)
     }
-  };
-  
-    
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center p-4">
