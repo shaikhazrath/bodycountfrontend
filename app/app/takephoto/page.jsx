@@ -102,7 +102,7 @@ const Page = () => {
       if (error) {
         console.log(error);
       }
-      // router.push('/app');
+      router.push('/app');
     } catch (error) {
       console.log(error);
     } finally {
