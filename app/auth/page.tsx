@@ -12,25 +12,33 @@ const AuthPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-    const handleGoogleLogin = async () => {
-      try {
-        setIsLoading(true)
-        setError(null)
-    
-        const { data, error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: window.location.origin + '/app', // Dynamically sets the current origin
-          },
-        })
-    
-        if (error) throw error
-        console.log(data) // Log data to check the response
-      } catch (err:any) {
-        setError(err.message || 'Failed to login with Google')
-        setIsLoading(false)
+  const handleGoogleLogin = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+  
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: 'https://bodycountai.vercel.app/app', 
+        },
+      });
+  
+      if (error) throw error;
+  
+      const user = await supabase.auth.getSession();
+  
+      if (user?.data?.session) {
+        router.push('/app'); 
+      } else {
+        setError('Authentication failed');
       }
+    } catch (err:any) {
+      setError(err.message || 'Failed to login with Google');
+      setIsLoading(false);
     }
+  };
+  
     
 
   return (
