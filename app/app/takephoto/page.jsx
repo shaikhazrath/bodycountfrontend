@@ -109,7 +109,13 @@ const Page = () => {
       setAddMealLoading(false);
     }
   }
-  
+  const areValuesZero =
+  !nutritionData ||
+  (nutritionData.calories === 0 &&
+    nutritionData.carbs === 0 &&
+    nutritionData.protein === 0 &&
+    nutritionData.fats === 0);
+
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -276,29 +282,32 @@ const Page = () => {
 
       {/* Add to Meal Button */}
       {nutritionData && (
-        <Button
-  className={`w-full mt-8 ${addMealLoading ? 'bg-gray-200 cursor-not-allowed' : 'bg-white hover:bg-white/80'} text-black focus:outline-none`}
-  size="lg"
-  onClick={handleaddmeal}
-  disabled={addMealLoading} // Disables the button when loading
-  aria-busy={addMealLoading} // Indicates if the action is in progress
-  aria-label="Add to meal" // Describes the button action
->
-  {!addMealLoading ? (
-    <div className="flex items-center justify-center">
-      <h1>Add to Meal</h1>
-    </div>
-  ) : (
-    <div className="flex items-center justify-center">
-      <Loader2 className="w-5 h-5 animate-spin mr-2" />
-      <span>Processing...</span>
-    </div>
-  )}
-</Button>
-
-
-        
-      )}
+  <Button
+    className={cn(
+      "w-full py-4 mt-5 px-6 rounded-lg text-white font-medium",
+      "transition-all duration-300",
+      addMealLoading || areValuesZero
+        ? "bg-white/10 cursor-not-allowed"
+        : "bg-white hover:bg-white/80 text-black"
+    )}
+    size="lg"
+    onClick={handleaddmeal}
+    disabled={addMealLoading || areValuesZero} // Disable if loading or values are zero
+    aria-busy={addMealLoading} // Indicates if the action is in progress
+    aria-label="Add to meal" // Describes the button action
+  >
+    {!addMealLoading ? (
+      <div className="flex items-center justify-center">
+        <h1>Add to Meal</h1>
+      </div>
+    ) : (
+      <div className="flex items-center justify-center">
+        <Loader2 className="w-5 h-5 animate-spin mr-2" />
+        <span>Processing...</span>
+      </div>
+    )}
+  </Button>
+)}
 
       {/* Image Modal */}
       {isModalOpen && previewUrl && (

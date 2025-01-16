@@ -33,7 +33,7 @@ const UserProfile = () => {
                 if (!userId) throw new Error('No authenticated user found.');
 
                 const { data, error } = await supabase
-                    .from('users')
+                    .from('user_goals')
                     .select('Calories, Fats, Protein, Carbs')
                     .eq('user', userId);
 
@@ -63,7 +63,7 @@ const UserProfile = () => {
     }, []);
 
     const handleCreate = async (userId) => {
-        await supabase.from('users').insert([{ user: userId, ...goals }]);
+        await supabase.from('user_goals').insert([{ user: userId, ...goals }]);
     };
 
     const handleUpdate = async () => {
@@ -72,7 +72,7 @@ const UserProfile = () => {
             const userId = (await supabase.auth.getUser()).data.user?.id;
 
             const { error } = await supabase
-                .from('users')
+                .from('user_goals')
                 .update(updatedData)
                 .eq('user', userId);
 

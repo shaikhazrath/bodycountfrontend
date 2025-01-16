@@ -20,14 +20,11 @@ const AuthPage = () => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin + '/app',
+          redirectTo: window.location.origin + '/app/onboarding',
         }
       })
 
       if (error) throw error
-      const user = await supabase.auth.getSession()
-console.log(user.data)
-      
     } catch (err: any) {
       setError(err.message || 'Failed to login with Google')
       setIsLoading(false)
@@ -35,17 +32,17 @@ console.log(user.data)
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
-            Nutrition Analyzer
+          <h1 className="text-4xl font-bold bg-white bg-clip-text text-transparent mb-2">
+            Bodycount Ai
           </h1>
           <p className="text-gray-400">Track your nutrition journey</p>
         </div>
 
-        <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+        <Card className="bg-white/5 border-gray-700 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-200">
               Welcome
@@ -97,12 +94,12 @@ console.log(user.data)
               </Alert>
             )}
 
-            <div className="mt-6 text-center text-sm text-gray-400">
+            {/* <div className="mt-6 text-center text-sm text-gray-400">
               By continuing, you agree to our{' '}
               <button className="text-blue-400 hover:text-blue-300">Terms of Service</button>{' '}
               and{' '}
               <button className="text-blue-400 hover:text-blue-300">Privacy Policy</button>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       </div>
