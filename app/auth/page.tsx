@@ -11,6 +11,18 @@ const AuthPage = () => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [authLoading,setAuthLoading] = useState(true)
+
+  const checkAuth=async()=>{
+    try {
+      const user = (await supabase.auth.getUser()).data.user?.id
+      if(user){
+        router.push('/app')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleGoogleLogin = async () => {
     try {

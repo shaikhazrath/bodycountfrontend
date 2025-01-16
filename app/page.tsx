@@ -59,7 +59,7 @@ function App() {
                 <a href="#how-it-works" className="text-zinc-400 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>How It Works</a>
                 <a href="#testimonials" className="text-zinc-400 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>Testimonials</a>
                 <a href="#benefits" className="text-zinc-400 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>Benefits</a>
-                <button className="bg-purple-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-700 transition-colors w-full" onClick={()=>router.push('/auth')}>
+                <button className="bg-purple-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-700 transition-colors w-full" onClick={()=>router.push('/app')}>
                   Get Started
                 </button>
               </div>
@@ -79,7 +79,7 @@ function App() {
               <p className="text-xl text-zinc-400 mb-8">
                 Simply upload a food photo and instantly get detailed nutrition facts powered by AI
               </p>
-              <button className="bg-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-purple-700 transition-colors shadow-lg hover:shadow-xl" onClick={()=>router.push('/auth')}>
+              <button className="bg-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-purple-700 transition-colors shadow-lg hover:shadow-xl" onClick={()=>router.push('/app')}>
                Use for Free
               </button>
             </div>
@@ -241,7 +241,7 @@ function App() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-8 text-white">Ready to Transform Your Nutrition Journey?</h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-black text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-zinc-900 transition-colors flex items-center justify-center" onClick={()=>router.push('/auth')}>
+            <button className="bg-black text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-zinc-900 transition-colors flex items-center justify-center" onClick={()=>router.push('/app')}>
              use for free<ArrowRight className="ml-2 w-5 h-5" />
             </button>
          
