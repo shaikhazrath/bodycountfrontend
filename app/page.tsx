@@ -87,7 +87,7 @@ function App() {
               <img
                 src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&q=80&w=800"
                 alt="Food photography with nutrition overlay"
-                className="rounded-2xl shadow-2xl h-screen"
+                className="rounded-2xl shadow-2xl h-auto md:h-screen"
               />
             </div>
           </div>
